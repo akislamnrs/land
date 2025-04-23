@@ -1,0 +1,43 @@
+<!-- search.html -->
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>আবেদন খোঁজ</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body class="bg-gray-50 p-6">
+  <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-bold mb-4">আবেদন খোঁজ করুন</h2>
+    <form onsubmit="searchApplication(event)">
+      <input type="text" id="searchId" placeholder="আবেদন নম্বর দিন" class="w-full border p-2 rounded mb-4" required>
+      <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">খুঁজুন</button>
+    </form>
+    <div id="result" class="mt-6 hidden">
+      <h3 class="text-lg font-semibold mb-2">আবেদনের বিস্তারিত</h3>
+      <p><strong>নাম:</strong> জন ডো</p>
+      <p><strong>এনআইডি:</strong> 1234567890</p>
+      <p><strong>মোবাইল:</strong> ০১৭xxxxxxxx</p>
+      <p><strong>ঠিকানা:</strong> ঢাকা, বাংলাদেশ</p>
+      <div class="flex gap-4 mt-4">
+        <button onclick="window.print()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">প্রিন্ট</button>
+        <div id="qrcode"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function searchApplication(event) {
+      event.preventDefault();
+      document.getElementById('result').classList.remove('hidden');
+      const id = document.getElementById('searchId').value;
+      const url = `https://akislamnrs.github.io/landmutuation/form.html?id=${id}`;
+      QRCode.toCanvas(document.getElementById("qrcode"), url, function (error) {
+        if (error) console.error(error);
+      });
+    }
+  </script>
+</body>
+</html>

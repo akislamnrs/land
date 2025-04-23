@@ -1,0 +1,60 @@
+<!-- form.html -->
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>আবেদন ফর্ম</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-gray-50 p-6">
+  <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-bold mb-4">ভূমি মিউটেশন আবেদন ফর্ম</h2>
+    <form id="mutationForm">
+      <label class="block mb-2">আবেদনকারীর নাম:
+        <input type="text" name="name" class="w-full border p-2 rounded" required>
+      </label>
+      <label class="block mb-2">জাতীয় পরিচয়পত্র নম্বর:
+        <input type="text" name="nid" class="w-full border p-2 rounded" required>
+      </label>
+      <label class="block mb-2">মোবাইল নম্বর:
+        <input type="tel" name="mobile" class="w-full border p-2 rounded" required>
+      </label>
+      <label class="block mb-4">জমির ঠিকানা:
+        <textarea name="address" class="w-full border p-2 rounded" required></textarea>
+      </label>
+      <div class="flex gap-4">
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">জমা দিন</button>
+        <button type="button" onclick="window.print()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">প্রিন্ট করুন</button>
+        <button type="button" onclick="downloadPDF()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">PDF ডাউনলোড</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwu5IlKbnRSHdNJiRwsGDF8P727WnjxhfLPIhMjj9d7aeFec1Vj0d-Ji7gtjNRyHoG5/exec";
+    const form = document.getElementById('mutationForm');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+        .then(response => alert("আবেদন সফলভাবে জমা হয়েছে!"))
+        .catch(error => alert("ত্রুটি হয়েছে!"));
+    });
+
+    function downloadPDF() {
+      const {{ jsPDF }} = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("ভূমি মিউটেশন আবেদন ফর্ম", 10, 10);
+      const formData = new FormData(form);
+      let y = 20;
+      for (const [key, value] of formData.entries()) {
+        doc.text(`${key}: ${value}`, 10, y);
+        y += 10;
+      }
+      doc.save("mutation_form.pdf");
+    }
+  </script>
+</body>
+</html>
